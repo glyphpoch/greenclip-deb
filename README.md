@@ -21,11 +21,11 @@ docker run \
 
 Creating new releases via GitHub Actions is as simple as updating the changelog with:
 ```sh
-dch --controlmaint --newversion 0.7.2-1 --distribution $(lsb_release -c -s) --urgency low
+dch --controlmaint --newversion 3.4-1 --distribution $(lsb_release -c -s) --urgency low
 ```
 or with the shorter version:
 ```sh
-dch -M -v 0.7.2-1 -D $(lsb_release -c -s) -u low
+dch -M -v 3.4-1 -D $(lsb_release -c -s) -u low
 ```
 
 And then pushing the changes to GitHub.
