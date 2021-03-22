@@ -22,15 +22,15 @@ jobs:
           echo "::set-output name=commit_messages::${COMMIT_MESSAGES}"
 
       - name: Skip release creation?
-        id: create_release
+        id: do_create_release
         run: echo "::set-output name=value::${{ !contains(steps.collect.outputs.commit_messages, '[skip-release]') }}"
 
       - name: Checkout
-        if: steps.create_release.outputs.value == 'true'
+        if: steps.do_create_release.outputs.value == 'true'
         uses: actions/checkout@v2
 
       - name: Build package
-        if: steps.create_release.outputs.value == 'true'
+        if: steps.do_create_release.outputs.value == 'true'
         run: |
           set -xeu
 
@@ -46,7 +46,7 @@ jobs:
           echo "DEB_PKG_VERSION=$(cat ${PWD}/gh_version_info)" >> $GITHUB_ENV
 
       - name: Create Release
-        if: steps.create_release.outputs.value == 'true'
+        if: steps.do_create_release.outputs.value == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -58,7 +58,7 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
-        if: steps.create_release.outputs.value == 'true'
+        if: steps.do_create_release.outputs.value == 'true'
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
