@@ -23,7 +23,7 @@ jobs:
 
       - name: Skip release creation?
         id: do_create_release
-        run: echo "::set-output name=value::${{ !contains(steps.collect.outputs.commit_messages, '[skip-release]') }}"
+        run: echo "::set-output name=value::${{ !contains(steps.git_info.outputs.commit_messages, '[skip-release]') }}"
 
       - name: Checkout
         if: steps.do_create_release.outputs.value == 'true'
