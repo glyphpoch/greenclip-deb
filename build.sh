@@ -4,6 +4,8 @@ set -xue
 
 BASEDIR=${PWD}
 
+mkdir -p /target
+
 # Install basic dependencies for downloading the source code and building a dev packagea
 export DEBIAN_FRONTEND=noninteractive
 apt-get update && apt-get install -yq \
@@ -11,7 +13,8 @@ apt-get update && apt-get install -yq \
     debhelper \
     devscripts \
     equivs \
-    git
+    git \
+    help2man
 
 # Install Rust & Cargo
 
@@ -22,8 +25,8 @@ VERSION=$(echo ${DEB_VERSION} | sed -e "s/-[1-9][0-9]*$//g")
 # Download source code
 SOURCE_FILE_NAME="greenclip_${VERSION}.orig.tar.gz"
 SOURCE_DIR="greenclip-${VERSION}"
-git clone git@github.com:erebe/greenclip.git --branch ${VERSION} --depth 1 ${SOURCE_DIR}
-tag -czvf ${SOURCE_FILE_NAME} ${SOURCE_DIR}
+git clone https://github.com/erebe/greenclip.git --branch ${VERSION} --depth 1 ${SOURCE_DIR}
+tar -czvf ${SOURCE_FILE_NAME} ${SOURCE_DIR}
 
 # Set up the debian dir in the source directory
 mv ${BASEDIR}/debian/ ${BASEDIR}/${SOURCE_DIR}/
@@ -51,6 +54,7 @@ mk-build-deps \
 # on the build-deps check because we're installing cargo manually.
 cd ${BASEDIR}/${SOURCE_DIR}
 debuild \
+    -b \
     --unsigned-source \
     --unsigned-changes
 

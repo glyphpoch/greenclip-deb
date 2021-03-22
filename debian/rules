@@ -8,11 +8,8 @@ override_dh_auto_clean:
 
 override_dh_auto_build:
 	stack upgrade --binary-only
-	stack init
-	stack build
+	stack install --local-bin-path /target/
 
 override_dh_auto_install:
-	mkdir -p debian/greenclip/usr/share/man/man1/
-	help2man greenclip > "debian/greenclip/usr/share/man/man1/greenclip.1.gz"
-	install -Dm04755 "target/release/greenclip" "debian/greenclip/usr/bin/greenclip"
+	install -Dm04755 "/target/greenclip" "debian/greenclip/usr/bin/greenclip"
 

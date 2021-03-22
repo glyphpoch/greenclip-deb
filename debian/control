@@ -12,9 +12,10 @@ Build-Depends:
  libx11-dev,
  libxcb-present-dev,
  libxrandr-dev,
- libxcb-screensaver0-dev,
+ libxss-dev,
  ghc,
- haskell-stack
+ haskell-stack,
+ pkg-config
 
 Package: greenclip
 Architecture: any
