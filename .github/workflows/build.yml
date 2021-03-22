@@ -1,0 +1,50 @@
+name: Build package and push into PPA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  everything:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build package
+        run: |
+          set -xeu
+
+          docker run \
+            --rm \
+            -v $PWD:/build \
+            -w /build \
+            ubuntu:20.10 \
+            bash build.sh
+
+          echo "DEB_PKG_PATH=${PWD}/output/$(ls ${PWD}/output)" >> $GITHUB_ENV
+          echo "DEB_PKG_NAME=$(ls ${PWD}/output)" >> $GITHUB_ENV
+          echo "DEB_PKG_VERSION=$(cat ${PWD}/gh_version_info)" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.DEB_PKG_VERSION }}
+          release_name: Release ${{ env.DEB_PKG_VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.DEB_PKG_PATH }}
+          asset_name: ${{ env.DEB_PKG_NAME }}
+          asset_content_type: application/vnd.debian.binary-package

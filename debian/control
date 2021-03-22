@@ -1,0 +1,24 @@
+Source: greenclip
+Maintainer: glyphpoch <glyphpoch@gmail.com>
+Section: misc
+Priority: optional
+Standards-Version: 4.5.0
+Build-Depends:
+ debhelper (>= 13),
+ libgmp-dev,
+ upx-ucl,
+ zlib1g-dev,
+ libpcre3-dev,
+ libx11-dev,
+ libxcb-present-dev,
+ libxrandr-dev,
+ libxcb-screensaver0-dev,
+ ghc,
+ haskell-stack
+
+Package: greenclip
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Clipboard manager written in Haskell
+ Keeps track of your clipboard history so you can quickly switch
+ between various clipboard contents.
