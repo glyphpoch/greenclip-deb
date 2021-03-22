@@ -9,15 +9,17 @@ jobs:
   everything:
     runs-on: ubuntu-latest
     steps:
-      name: Collect all commit messages
-      id: git_info
-      run: |
-        COMMIT_MESSAGES="${{ join(github.event.commits.*.message, ',') }}"
-        # Need to strip out new lines
-        COMMIT_MESSAGES="${COMMIT_MESSAGES//'%'/'%25'}"
-        COMMIT_MESSAGES="${COMMIT_MESSAGES//$'\n'/'%0A'}"
-        COMMIT_MESSAGES="${COMMIT_MESSAGES//$'\r'/'%0D'}"
-        echo "::set-output name=commit_messages::${COMMIT_MESSAGES}"
+      - name: Collect all commit messages
+        id: git_info
+        run: |
+          COMMIT_MESSAGES="${{ join(github.event.commits.*.message, ',') }}"
+
+          # Need to strip out new lines
+          COMMIT_MESSAGES="${COMMIT_MESSAGES//'%'/'%25'}"
+          COMMIT_MESSAGES="${COMMIT_MESSAGES//$'\n'/'%0A'}"
+          COMMIT_MESSAGES="${COMMIT_MESSAGES//$'\r'/'%0D'}"
+
+          echo "::set-output name=commit_messages::${COMMIT_MESSAGES}"
 
       - name: Skip release creation?
         id: create_release
