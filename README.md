@@ -1,5 +1,7 @@
 # Debian package builder for greenclip
 
+**WIP and very messy at the moment**
+
 This repository contains Debian packaging files, build scripts and a GitHub Actions workflow for building a greenclip Debian package.
 
 # Usage
